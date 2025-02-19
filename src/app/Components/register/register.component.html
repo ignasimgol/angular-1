@@ -1,0 +1,71 @@
+<div style="margin-left: auto; margin-right: auto">
+  <p id="registerFeedback"></p>
+</div>
+<div>
+  <h1>Register</h1>
+
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" formControlName="name" />
+      <div *ngIf="name.errors && name.dirty">
+        <small *ngIf="name.errors?.['required']">Name is required</small>
+        <small *ngIf="name.errors?.['minlength'] || name.errors?.['maxlength']">Name must be between 5 and 25 characters</small>
+      </div>
+    </div>
+
+    <div>
+      <label for="surname_1">First Surname:</label>
+      <input type="text" id="surname_1" formControlName="surname_1" />
+      <div *ngIf="surname_1.errors && surname_1.dirty">
+        <small *ngIf="surname_1.errors?.['required']">First surname is required</small>
+        <small *ngIf="surname_1.errors?.['minlength'] || surname_1.errors?.['maxlength']">First surname must be between 5 and 25 characters</small>
+      </div>
+    </div>
+
+    <div>
+      <label for="surname_2">Second Surname:</label>
+      <input type="text" id="surname_2" formControlName="surname_2" />
+      <div *ngIf="surname_2.errors && surname_2.dirty">
+        <small *ngIf="surname_2.errors?.['minlength'] || surname_2.errors?.['maxlength']">Second surname must be between 5 and 25 characters</small>
+      </div>
+    </div>
+
+    <div>
+      <label for="alias">Alias:</label>
+      <input type="text" id="alias" formControlName="alias" />
+      <div *ngIf="alias.errors && alias.dirty">
+        <small *ngIf="alias.errors?.['required']">Alias is required</small>
+        <small *ngIf="alias.errors?.['minlength'] || alias.errors?.['maxlength']">Alias must be between 5 and 25 characters</small>
+      </div>
+    </div>
+
+    <div>
+      <label for="birth_date">Birth Date:</label>
+      <input type="date" id="birth_date" formControlName="birth_date" />
+      <div *ngIf="birth_date.errors && birth_date.dirty">
+        <small *ngIf="birth_date.errors?.['required']">Birth date is required</small>
+      </div>
+    </div>
+
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" formControlName="email" />
+      <div *ngIf="email.errors && email.dirty">
+        <small *ngIf="email.errors?.['required']">Email is required</small>
+        <small *ngIf="email.errors?.['email']">Please enter a valid email</small>
+      </div>
+    </div>
+
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" formControlName="password" />
+      <div *ngIf="password.errors && password.dirty">
+        <small *ngIf="password.errors?.['required']">Password is required</small>
+        <small *ngIf="password.errors?.['minlength'] || password.errors?.['maxlength']">Password must be between 8 and 16 characters</small>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="!registerForm.valid">Register</button>
+  </form>
+</div>
