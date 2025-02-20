@@ -41,6 +41,7 @@ export class PostFormComponent implements OnInit {
   ) {
     this.isValidForm = null;
     this.postId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.isUpdateMode = this.postId !== 'new'; 
     this.post = new PostDTO('', '', 0, 0, new Date());
     this.categories = [];
     this.isUpdateMode = false;
@@ -77,7 +78,7 @@ export class PostFormComponent implements OnInit {
     await this.loadCategories();
 
     let errorResponse: any;
-    if (this.postId) {
+    if (this.postId && this.postId !== '0') {  // Check if it's not a new post
       this.isUpdateMode = true;
       try {
         this.post = await this.postService.getPostById(this.postId);

@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LocalStorageService } from 'src/app/Services/local-storage.service';
-import { PostService } from 'src/app/Services/post.service';
-import { SharedService } from 'src/app/Services/shared.service';
 import { PostDTO } from 'src/app/Models/post.dto';
+import { PostService } from 'src/app/Services/post.service';
+import { LocalStorageService } from 'src/app/Services/local-storage.service';
+import { SharedService } from 'src/app/Services/shared.service';
 
 @Component({
   selector: 'app-posts-list',
   templateUrl: './posts-list.component.html',
   styleUrls: ['./posts-list.component.scss'],
 })
-export class PostsListComponent implements OnInit {
+export class PostsListComponent {
   posts!: PostDTO[];
 
   constructor(
@@ -18,38 +18,41 @@ export class PostsListComponent implements OnInit {
     private router: Router,
     private localStorageService: LocalStorageService,
     private sharedService: SharedService
-  ) {}
-
-  async ngOnInit(): Promise<void> {
-    await this.loadPosts();
+  ) {
+    this.loadPosts();
   }
 
   private async loadPosts(): Promise<void> {
-    const userId = this.localStorageService.get('user_id');
-    if (userId) {
-      try {
-        this.posts = await this.postService.getPostsByUserId(userId);
-      } catch (error: any) {
-        this.sharedService.errorLog(error.error);
-      }
+    let errorResponse: any;
+    try {
+      this.posts = await this.postService.getPosts();
+    } catch (error: any) {
+      errorResponse = error.error;
+      this.sharedService.errorLog(errorResponse);
     }
   }
 
   createPost(): void {
-    this.router.navigateByUrl('user/post');
+    this.router.navigateByUrl('/user/post/');
   }
 
   updatePost(postId: string): void {
-    this.router.navigateByUrl('user/post/' + postId);
+    this.router.navigateByUrl('/user/post/' + postId);
   }
 
   async deletePost(postId: string): Promise<void> {
-    if (confirm('Are you sure you want to delete this post?')) {
+    let errorResponse: any;
+
+    let result = confirm('Confirm delete post with id: ' + postId + ' .');
+    if (result) {
       try {
-        await this.postService.deletePost(postId);
-        await this.loadPosts();
+        const rowsAffected = await this.postService.deletePost(postId);
+        if (rowsAffected.affected > 0) {
+          this.loadPosts();
+        }
       } catch (error: any) {
-        this.sharedService.errorLog(error.error);
+        errorResponse = error.error;
+        this.sharedService.errorLog(errorResponse);
       }
     }
   }

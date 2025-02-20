@@ -1,1 +1,84 @@
 <!-- TODO 3 -->
+<div class="posts-container">
+    <div class="post-card" *ngFor="let post of posts">
+      <h2>{{ post.title }}</h2>
+      <p class="description">{{ post.description }}</p>
+      
+      <div class="post-info">
+        <p>Published: {{ post.publication_date | date:'shortDate' }}</p>
+        <p>Author: {{ post.userAlias }}</p>
+      </div>
+  
+      <div class="categories">
+        <span 
+          *ngFor="let category of post.categories" 
+          class="category-tag"
+          [style.background-color]="category.css_color">
+          {{ category.title }}
+        </span>
+      </div>
+  
+      <div class="interactions">
+        <span class="stats">
+          <i class="fas fa-thumbs-up"></i> {{ post.num_likes }}
+          <i class="fas fa-thumbs-down"></i> {{ post.num_dislikes }}
+        </span>
+  
+        <div class="action-buttons" *ngIf="showButtons">
+          <button (click)="like(post.postId)">Like</button>
+          <button (click)="dislike(post.postId)">Dislike</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    .posts-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+  
+    .post-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  
+    .post-info {
+      color: #666;
+      font-size: 0.9em;
+    }
+  
+    .categories {
+      margin: 10px 0;
+    }
+  
+    .category-tag {
+      display: inline-block;
+      padding: 4px 8px;
+      margin: 2px;
+      border-radius: 4px;
+      color: white;
+    }
+  
+    .interactions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+    }
+  
+    .stats {
+      color: #666;
+    }
+  
+    .action-buttons button {
+      margin-left: 10px;
+      padding: 5px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>

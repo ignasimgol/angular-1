@@ -1,33 +1,30 @@
-<h2>Post List</h2>
+<h2>Posts List</h2>
+<button (click)="createPost()">ADD</button>
 
-<div class="posts-container">
-  <div class="add-button">
-    <button (click)="createPost()">Add New Post</button>
-  </div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Likes</th>
-        <th>Dislikes</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let post of posts">
-        <td>{{ post.postId }}</td>
-        <td>{{ post.title }}</td>
-        <td>{{ post.description }}</td>
-        <td>{{ post.num_likes }}</td>
-        <td>{{ post.num_dislikes }}</td>
-        <td>
-          <button (click)="updatePost(post.postId)">Update</button>
-          <button (click)="deletePost(post.postId)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>TITLE</th>
+      <th>DESCRIPTION</th>
+      <th>PUBLICATION DATE</th>
+      <th>LIKES</th>
+      <th>DISLIKES</th>
+      <th>ACTIONS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let post of posts">
+      <td>{{ post.postId }}</td>
+      <td>{{ post.title }}</td>
+      <td>{{ post.description }}</td>
+      <td>{{ post.publication_date | date }}</td>
+      <td>{{ post.num_likes }}</td>
+      <td>{{ post.num_dislikes }}</td>
+      <td>
+        <button (click)="updatePost(post.postId)">UPDATE</button>
+        <button (click)="deletePost(post.postId)">DELETE</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
