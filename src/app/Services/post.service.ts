@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { NONE_TYPE } from '@angular/compiler';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { PostDTO } from '../Models/post.dto';
 
 interface updateResponse {
@@ -27,9 +28,10 @@ export class PostService {
     return this.http.get<PostDTO[]>(this.urlBlogUocApi).toPromise();
   }
 
-  getPostsByUserId() {
-    // TODO 22
+  getPostsByUserId(userId: string): Promise<PostDTO[]> {
+    return this.http.get<PostDTO[]>(`${this.urlBlogUocApi}/user/${userId}`).toPromise();
   }
+
 
   createPost(post: PostDTO): Promise<PostDTO> {
     return this.http.post<PostDTO>(this.urlBlogUocApi, post).toPromise();
