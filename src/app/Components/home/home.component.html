@@ -1,7 +1,30 @@
 <!-- TODO 3 -->
+<div class="filter-section">
+  <div class="filter-controls">
+    <input 
+      type="text" 
+      [(ngModel)]="searchText" 
+      placeholder="Search in title or description..."
+      (input)="applyFilters()">
+    
+    <input 
+      type="text" 
+      [(ngModel)]="authorFilter" 
+      placeholder="Filter by author..."
+      (input)="applyFilters()">
+    
+    <select [(ngModel)]="dateFilter" (change)="applyFilters()">
+      <option value="all">All dates</option>
+      <option value="today">Today</option>
+      <option value="week">This week</option>
+      <option value="month">This month</option>
+    </select>
+  </div>
+</div>
+
 <div class="posts-container">
-    <div class="post-card" *ngFor="let post of posts">
-      <h2>{{ post.title }}</h2>
+  <div class="post-card" *ngFor="let post of filteredPosts">
+    <h2>{{ post.title }}</h2>
       <p class="description">{{ post.description }}</p>
       
       <div class="post-info">
@@ -31,54 +54,3 @@
       </div>
     </div>
   </div>
-  
-  <style>
-    .posts-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-  
-    .post-card {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-  
-    .post-info {
-      color: #666;
-      font-size: 0.9em;
-    }
-  
-    .categories {
-      margin: 10px 0;
-    }
-  
-    .category-tag {
-      display: inline-block;
-      padding: 4px 8px;
-      margin: 2px;
-      border-radius: 4px;
-      color: white;
-    }
-  
-    .interactions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 15px;
-    }
-  
-    .stats {
-      color: #666;
-    }
-  
-    .action-buttons button {
-      margin-left: 10px;
-      padding: 5px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  </style>

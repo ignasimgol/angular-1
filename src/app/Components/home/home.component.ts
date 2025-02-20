@@ -14,7 +14,13 @@ import { SharedService } from 'src/app/Services/shared.service';
 })
 export class HomeComponent {
   posts!: PostDTO[];
+  filteredPosts!: PostDTO[];
   showButtons: boolean;
+  
+  // Filter properties
+  searchText: string = '';
+  authorFilter: string = '';
+  dateFilter: string = 'all';
   constructor(
     private postService: PostService,
     private localStorageService: LocalStorageService,
@@ -45,13 +51,54 @@ export class HomeComponent {
 
     try {
       this.posts = await this.postService.getPosts();
+      this.filteredPosts = [...this.posts]; // Initialize filtered posts
     } catch (error: any) {
       errorResponse = error.error;
       this.sharedService.errorLog(errorResponse);
     }
   }
 
-  async like(postId: string): Promise<void> {
+  applyFilters(): void {
+    this.filteredPosts = this.posts.filter(post => {
+      const matchesSearch = !this.searchText || 
+        post.title.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        post.description.toLowerCase().includes(this.searchText.toLowerCase());
+
+      const matchesAuthor = !this.authorFilter ||
+        post.userAlias.toLowerCase().includes(this.authorFilter.toLowerCase());
+
+      const matchesDate = this.checkDateFilter(new Date(post.publication_date));
+
+      return matchesSearch && matchesAuthor && matchesDate;
+    });
+  }
+
+  private checkDateFilter(postDate: Date): boolean {
+    if (this.dateFilter === 'all') return true;
+
+    const today = new Date();
+    
+    switch (this.dateFilter) {
+      case 'today':
+        return postDate.toDateString() === today.toDateString();
+      
+      case 'week':
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        return postDate >= weekAgo;
+      
+      case 'month':
+        const monthAgo = new Date();
+        monthAgo.setMonth(monthAgo.getMonth() - 1);
+        return postDate >= monthAgo;
+      
+      default:
+        return true;
+    }
+  }
+
+  // Make sure these methods are public
+  public async like(postId: string): Promise<void> {
     let errorResponse: any;
     try {
       await this.postService.likePost(postId);
@@ -62,7 +109,7 @@ export class HomeComponent {
     }
   }
 
-  async dislike(postId: string): Promise<void> {
+  public async dislike(postId: string): Promise<void> {
     let errorResponse: any;
     try {
       await this.postService.dislikePost(postId);
